@@ -86,16 +86,7 @@ int main(int argc, char* argv[]) {
 
         // copy Mat pixels to input tensor
         unsigned char *input = (unsigned char*)(frame.data);
-        for(int j = 0;j < frame.rows;j++){
-            for(int i = 0;i < frame.cols;i++){
-                unsigned char r = input[frame.rows * j + i ] ;
-                unsigned char g = input[frame.rows * j + i + 1];
-                unsigned char b = input[frame.rows * j + i + 2];
-                input_tensor[frame.rows * j + i] = r;
-                input_tensor[frame.rows * j + i + 1] = g;
-                input_tensor[frame.rows * j + i + 2] = b;
-            }
-        }
+        memcpy(input_tensor, input, sizeof(unsigned char) * frame.rows * frame.cols);
 
         // Run inference
         TFLITE_MINIMAL_CHECK(interpreter->Invoke() == kTfLiteOk);
